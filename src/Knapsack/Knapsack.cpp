@@ -41,7 +41,32 @@ void Knapsack::solve() {
 
     this->printMatrix(matrix);
 
-    std::clog << "\nMaximum weight: " << matrix[possible_objects_.size()][this->weight_] << std::endl;
+    int object_ptr = possible_objects_.size();
+    int weight_ptr = this->weight_;
+
+    std::vector<unsigned> position;
+
+    while (true) {
+        if (object_ptr == 0 || weight_ptr == 0) {
+            break;
+        }
+        if (matrix[object_ptr][weight_ptr] == matrix[object_ptr - 1][weight_ptr]) {
+            object_ptr -= 1;
+        } else {
+            if (matrix[object_ptr][weight_ptr] == 0) {
+                break;
+            }
+            position.push_back(object_ptr);
+            weight_ptr -= (object_ptr + 1);
+            object_ptr -= 1;
+        }
+    }
+
+    std::clog << "\nMaximum Value: " << matrix[possible_objects_.size()][this->weight_] << std::endl;
+    std::clog << "Items that are part of the solution: " << std::endl;
+    for (auto index : position) {
+        std::clog << " - Weight: " << this->possible_objects_[index-1]->getWeight() << " Cost: " <<  this->possible_objects_[index-1]->getCost() << std::endl;
+    }
 }
 
 
